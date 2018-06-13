@@ -41,6 +41,11 @@ int main (int argc, char** argv)
 	setvbuf(stdout, DE_NULL, _IOLBF, 4*1024);
 #endif
 
+	std::time_t t = std::time(0) ;
+	char cstr[128] ;
+	std::strftime( cstr, sizeof(cstr), "%c", std::localtime(&t) ) ;
+	printf("\nTests started at %s.\n\n", cstr);
+
 	try
 	{
 		tcu::CommandLine				cmdLine		(argc, argv);
@@ -60,6 +65,10 @@ int main (int argc, char** argv)
 	{
 		tcu::die("%s", e.what());
 	}
+
+	t = std::time(0) ;
+	std::strftime( cstr, sizeof(cstr), "%c", std::localtime(&t) ) ;
+	printf("\nTests finished at %s.\n\n", cstr);
 
 	return 0;
 }

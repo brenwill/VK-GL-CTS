@@ -433,16 +433,19 @@ static void parseCaseList (CaseTreeNode* root, std::istream& in)
 			if (nodeStack[stackPos]->hasChild(curName))
 				throw std::invalid_argument("Duplicate test case");
 
-			CaseTreeNode* const newChild = new CaseTreeNode(curName);
+			if (curName[0] != '#')
+			{
+				CaseTreeNode* const newChild = new CaseTreeNode(curName);
 
-			try
-			{
-				nodeStack[stackPos]->addChild(newChild);
-			}
-			catch (...)
-			{
-				delete newChild;
-				throw;
+				try
+				{
+					nodeStack[stackPos]->addChild(newChild);
+				}
+				catch (...)
+				{
+					delete newChild;
+					throw;
+				}
 			}
 
 			curName.clear();

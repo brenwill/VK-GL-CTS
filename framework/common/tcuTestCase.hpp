@@ -78,7 +78,7 @@ inline bool isValidTestCaseNameChar (char c)
 	return de::inRange(c, 'a', 'z') ||
 		   de::inRange(c, 'A', 'Z') ||
 		   de::inRange(c, '0', '9') ||
-		   c == '_' || c == '-';
+		   c == '_' || c == '-' || c == '#';
 }
 
 /*--------------------------------------------------------------------*//*!
