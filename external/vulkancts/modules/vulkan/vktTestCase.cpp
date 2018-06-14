@@ -36,6 +36,9 @@
 #include "deSTLUtil.hpp"
 #include "deMemory.h"
 
+using namespace vk;
+#include <MoltenVK/vk_mvk_moltenvk.h>
+
 namespace vkt
 {
 
@@ -206,7 +209,17 @@ Move<VkDevice> createDefaultDevice (const InstanceInterface&			vki,
 	deviceInfo.ppEnabledLayerNames			= (layerPtrs.empty() ? DE_NULL : &layerPtrs[0]);
 	deviceInfo.pEnabledFeatures				= enabledFeatures.pNext ? DE_NULL : &enabledFeatures.features;
 
-	return createDevice(vki, physicalDevice, &deviceInfo);
+	Move<VkDevice> vkd = createDevice(vki, physicalDevice, &deviceInfo);
+
+	VkDevice dvc = vkd.get();
+	MVKDeviceConfiguration mvkConfig;
+	vkGetMoltenVKDeviceConfigurationMVK(dvc, &mvkConfig);
+	mvkConfig.debugMode = false;
+	mvkConfig.performanceTracking = false;
+	mvkConfig.metalCompileTimeout = 50 * 1000 * 1000;	// 50 ms
+	vkSetMoltenVKDeviceConfigurationMVK(dvc, &mvkConfig);
+
+	return vkd;
 };
 
 bool isPhysicalDeviceFeatures2Supported (const vector<string>& instanceExtensions)

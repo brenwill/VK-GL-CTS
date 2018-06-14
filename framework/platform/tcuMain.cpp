@@ -41,15 +41,15 @@ int main (int argc, char** argv)
 	setvbuf(stdout, DE_NULL, _IOLBF, 4*1024);
 #endif
 
-	std::time_t t = std::time(0) ;
+	std::time_t startTime = std::time(0);
 	char cstr[128] ;
-	std::strftime( cstr, sizeof(cstr), "%c", std::localtime(&t) ) ;
+	std::strftime( cstr, sizeof(cstr), "%c", std::localtime(&startTime) ) ;
 	printf("\nTests started at %s.\n\n", cstr);
 
 	try
 	{
 		tcu::CommandLine				cmdLine		(argc, argv);
-		tcu::DirArchive					archive		(".");
+		tcu::DirArchive					archive		("..");
 		tcu::TestLog					log			(cmdLine.getLogFileName(), cmdLine.getLogFlags());
 		de::UniquePtr<tcu::Platform>	platform	(createPlatform());
 		de::UniquePtr<tcu::App>			app			(new tcu::App(*platform, archive, log, cmdLine));
@@ -66,9 +66,9 @@ int main (int argc, char** argv)
 		tcu::die("%s", e.what());
 	}
 
-	t = std::time(0) ;
-	std::strftime( cstr, sizeof(cstr), "%c", std::localtime(&t) ) ;
-	printf("\nTests finished at %s.\n\n", cstr);
+	std::time_t endTime = std::time(0) ;
+	std::strftime( cstr, sizeof(cstr), "%c", std::localtime(&endTime) ) ;
+	printf("\nTests finished at %s in %li seconds.\n\n", cstr, (endTime - startTime));
 
 	return 0;
 }
